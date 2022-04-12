@@ -29,7 +29,6 @@ ReadFileOneC::ReadFileOneC() {
     AddMethod(L"Value", L"Значение", this, &ReadFileOneC::getValue);
     AddMethod(L"Find", L"Найти", this, &ReadFileOneC::regSearch);
 
-
 }
 
 std::string ReadFileOneC::extensionName() {
