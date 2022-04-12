@@ -3,6 +3,7 @@
 
 #ifdef _WINDOWS
 
+#define NOMINMAX
 #include <windows.h>
 
 #endif //_WINDOWS

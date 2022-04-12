@@ -5,10 +5,13 @@ VisualStudioVersion = 17.0.31825.309
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReadFileOneC", "ReadFileOneC.vcxproj", "{A58E1267-05D9-3244-8C32-808E543078A2}"
 	ProjectSection(ProjectDependencies) = postProject
+		{4638C872-38EC-3776-9F36-EFD7C6943D29} = {4638C872-38EC-3776-9F36-EFD7C6943D29}
 		{90E1C1AE-0016-3832-8918-291AC2A046E7} = {90E1C1AE-0016-3832-8918-291AC2A046E7}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlibstatic", "zlib\zlibstatic.vcxproj", "{90E1C1AE-0016-3832-8918-291AC2A046E7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "re2", "re2\re2.vcxproj", "{4638C872-38EC-3776-9F36-EFD7C6943D29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +37,14 @@ Global
 		{90E1C1AE-0016-3832-8918-291AC2A046E7}.Release|x64.Build.0 = Release|x64
 		{90E1C1AE-0016-3832-8918-291AC2A046E7}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
 		{90E1C1AE-0016-3832-8918-291AC2A046E7}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
+		{4638C872-38EC-3776-9F36-EFD7C6943D29}.Debug|x64.ActiveCfg = Debug|x64
+		{4638C872-38EC-3776-9F36-EFD7C6943D29}.Debug|x64.Build.0 = Debug|x64
+		{4638C872-38EC-3776-9F36-EFD7C6943D29}.MinSizeRel|x64.ActiveCfg = MinSizeRel|x64
+		{4638C872-38EC-3776-9F36-EFD7C6943D29}.MinSizeRel|x64.Build.0 = MinSizeRel|x64
+		{4638C872-38EC-3776-9F36-EFD7C6943D29}.Release|x64.ActiveCfg = Release|x64
+		{4638C872-38EC-3776-9F36-EFD7C6943D29}.Release|x64.Build.0 = Release|x64
+		{4638C872-38EC-3776-9F36-EFD7C6943D29}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
+		{4638C872-38EC-3776-9F36-EFD7C6943D29}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

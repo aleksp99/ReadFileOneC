@@ -10,6 +10,7 @@
 #include "ReadFileOneC.h"
 
 #include "zlib.h"
+#include "re2/re2.h"
 
 #define CHUNK_SIZE 262144
 
@@ -28,7 +29,6 @@ ReadFileOneC::ReadFileOneC() {
     AddMethod(L"Text", L"Текст", this, &ReadFileOneC::getText, { {0, false} });
     AddMethod(L"Value", L"Значение", this, &ReadFileOneC::getValue);
     AddMethod(L"Find", L"Найти", this, &ReadFileOneC::regSearch);
-
 
 }
 
@@ -88,24 +88,27 @@ variant_t ReadFileOneC::getValue(variant_t indexs) {
     return cursor->get();
 }
 variant_t ReadFileOneC::regSearch(variant_t pattern) {
-    std::cmatch match;
-    std::string result;
-    size_t countMatch(0);
-    std::string value;
-    while (std::regex_search(text.c_str(), match, std::regex(std::get<std::string>(pattern), std::regex::icase))) {
 
-        countMatch++;
-        value = beginArray + std::to_string(match.size()); // array element
-        for (size_t i = 0; i < match.size(); i++) {
-            addValueToResult(value, match[i].str());
-        }
-        value.append("}\n}");
-        addValueToResult(result, value, countMatch);
-        text = match.suffix();
+    std::string result;
+    size_t count(0);
+
+    re2::RE2::Options options;
+    options.set_log_errors(false);
+    re2::RE2 re2(std::get<std::string>(pattern), options);
+
+    re2::StringPiece::iterator text_it = re2::StringPiece(text).begin();
+    re2::StringPiece value;
+    while (RE2::PartialMatch(text_it, re2, &value)) {
+        count++;
+        result.push_back(',');
+        std::string str(value.ToString());
+        for (std::string::size_type pos{}; str.npos != (pos = str.find("\"", pos, 1)); pos += 2) // инкрементация кавычки
+            str.replace(pos, 1, "\"\"", 2);
+        result.append("{\"S\",\""); result.append(str); result.append("\"}");
+        text_it = value.begin() + value.size();
     }
-    text = "";
-    data = BracketsFile();
-    return beginArray + std::to_string(countMatch) + (countMatch == 0 ? "" : result + "\n") + "}\n}"; // array
+    return "{\"#\",51e7a0d2-530b-11d4-b98a-008048da3034,{" + std::to_string(count) + result + "}}";
+
 }
 
 // utility methods
