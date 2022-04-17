@@ -5,6 +5,7 @@
 ## Создано на базе:  
 * Modern Native AddIn [here](https://github.com/aleksp99/ReadFileOneC).  
 * ZLIB DATA COMPRESSION LIBRARY [here](https://github.com/madler/zlib).  
+* RE2 [here](https://github.com/google/re2).  
 
 ## Методы:
 * ВерсияКомпоненты(Version):  
@@ -39,6 +40,10 @@
 		* <индексы> (обязательный)  
 		Тип: Строка.  
 		Адрес(индексы разделенные запятой) значения в файле.  
+		* <преобразовать> (необязательный)  
+		Тип: Булево.  
+		Истина - Системное представление значения в информационной базе.  
+		По умолчанию: Ложь.
 	* Возвращаемое значение:  
 		Тип: Строка.
 		Значение из файла.  
@@ -47,8 +52,8 @@
 		* <шаблон> (необязательный)  
 		Тип: Строка.  
 		Шаблон регулярного выражения для сопоставления.   
-		ECMAScript, icase  
-		https://docs.microsoft.com/ru-ru/cpp/standard-library/regular-expressions-cpp?view=msvc-170  
+		RE2 by Google  
+		https://github.com/google/re2/wiki/Syntax  
 	* Возвращаемое значение:  
 	Тип: Строка, Число.  
 	Строка - Системное представление значения в информационной базе.  

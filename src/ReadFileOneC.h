@@ -19,8 +19,8 @@ private:
 
     // api interface
     variant_t open(variant_t path, variant_t mode);
-    variant_t getText(variant_t toArray);
-    variant_t getValue(variant_t indexs);
+    variant_t getText(variant_t toStringInternal);
+    variant_t getValue(variant_t indexs, variant_t toStringInternal);
     variant_t regSearch(variant_t pattern);
 
     // utility methods

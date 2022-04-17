@@ -27,7 +27,7 @@ ReadFileOneC::ReadFileOneC() {
 
     AddMethod(L"Open", L"Открыть", this, &ReadFileOneC::open);
     AddMethod(L"Text", L"Текст", this, &ReadFileOneC::getText, { {0, false} });
-    AddMethod(L"Value", L"Значение", this, &ReadFileOneC::getValue);
+    AddMethod(L"Value", L"Значение", this, &ReadFileOneC::getValue, { {1, false} });
     AddMethod(L"Find", L"Найти", this, &ReadFileOneC::regSearch);
 
 }
@@ -64,12 +64,12 @@ variant_t ReadFileOneC::open(variant_t path, variant_t mode) {
     }
     return true;
 }
-variant_t ReadFileOneC::getText(variant_t toArray) {
-    if (std::get<bool>(toArray))
-        return toStringInternal();
-    return text;
+variant_t ReadFileOneC::getText(variant_t toStringInternal) {
+    if (data.empty() && text.size() > 0)
+        data = BracketsFile(text);
+    return data.get(std::get<bool>(toStringInternal));
 }
-variant_t ReadFileOneC::getValue(variant_t indexs) {
+variant_t ReadFileOneC::getValue(variant_t indexs, variant_t toStringInternal) {
 
     if (data.empty() && text.size() > 0)
         data = BracketsFile(text);
@@ -85,7 +85,7 @@ variant_t ReadFileOneC::getValue(variant_t indexs) {
         else
             return std::monostate();
     }
-    return cursor->get();
+    return cursor->get(std::get<bool>(toStringInternal));
 }
 variant_t ReadFileOneC::regSearch(variant_t pattern) {
 
@@ -100,15 +100,14 @@ variant_t ReadFileOneC::regSearch(variant_t pattern) {
     re2::StringPiece value;
     while (RE2::PartialMatch(text_it, re2, &value)) {
         count++;
-        result.push_back(',');
         std::string str(value.ToString());
         for (std::string::size_type pos{}; str.npos != (pos = str.find("\"", pos, 1)); pos += 2) // инкрементация кавычки
             str.replace(pos, 1, "\"\"", 2);
-        result.append("{\"S\",\""); result.append(str); result.append("\"}");
+        result.push_back(',');
+        result.append(BracketsFile::setType(str));
         text_it = value.begin() + value.size();
     }
     return "{\"#\",51e7a0d2-530b-11d4-b98a-008048da3034,{" + std::to_string(count) + result + "}}";
-
 }
 
 // utility methods
@@ -212,81 +211,4 @@ void ReadFileOneC::decode(std::string& path)
         delete[] buffer;
     }
     fs.close();
-}
-
-std::string ReadFileOneC::toStringInternal()
-{
-    size_t position(0);
-    return toStringInternal(position);
-}
-std::string ReadFileOneC::toStringInternal(size_t& position)
-{
-    std::string result;
-    std::string value;
-    size_t countValue(0);
-    size_t countMark(0);
-    for (size_t i = ++position; i < text.size(); i++)
-    {
-        position = i;
-
-        if (text[i] == '"')
-            countMark++;
-
-        if (countMark % 2 > 0)
-        {
-            value.push_back(text[i]);
-            continue;
-        }
-
-        switch (text[i])
-        {
-        case '{':
-            value.append(toStringInternal(i));
-            break;
-        case '}':
-            addValueToResult(result, value, countValue);
-            return beginArray + std::to_string(countValue) + (countValue == 0 ? "" : result + "\n") + "}\n}"; // array
-        case ',':
-            countMark = 0;
-            addValueToResult(result, value, countValue);
-            break;
-        default:
-            if (!((text[i - 1] == ',' || text[i - 1] == '}') && text[i] == '\n'))
-                value.push_back(text[i]);
-            break;
-        }
-    }
-}
-void ReadFileOneC::addValueToResult(std::string& result, std::string& value)
-{
-    size_t countValue(0);
-    addValueToResult(result, value, countValue);
-}
-void ReadFileOneC::addValueToResult(std::string& result, std::string& value, size_t& countValue)
-{
-    if (value.size() == 0)
-        return;
-
-    if (value.size() == 0) // Неопределено
-        value = "{\"U\"}";
-    else if (std::regex_match(value.c_str(), expDateTime)) // дата время
-        value = "{\"D\"," + value + "}";
-    else if (std::regex_match(value.c_str(), expNumber)) // Число
-        value = "{\"N\"," + value + "}";
-    else if (std::regex_match(value.c_str(), expQuid)) // УникальныйИдентификатор
-        value = "{\"#\",fc01b5df-97fe-449b-83d4-218a090e681e," + value + "}";
-    else if (value.front() == '"' && value.back() == '"') // Строка
-        value = "{\"S\"," + value + "}";
-    else if (value.find("{\"#\",51e7a0d2-530b-11d4-b98a-008048da3034,\n{") == std::string::npos) // не массив, то Строка
-    {
-        for (std::string::size_type pos{}; value.npos != (pos = value.find("\"", pos, 1)); pos += 2) // инкрементация кавычки
-            value.replace(pos, 1, "\"\"", 2);
-
-        value = "{\"S\",\"" + value + "\"}";
-    }
-
-    countValue++;
-    result.append(",\n");
-    result.append(value);
-    value.clear();
 }

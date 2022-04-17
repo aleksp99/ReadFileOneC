@@ -3,6 +3,11 @@
 #include <vector>
 #include <string>
 
+#define TYPE_DATETIME "\"D\""
+#define TYPE_NUMBER "\"N\""
+#define TYPE_QUID "\"#\",fc01b5df-97fe-449b-83d4-218a090e681e"
+#define TYPE_STRING "\"S\""
+
 class BracketsFile {
 public:
 	BracketsFile() {}
@@ -15,8 +20,8 @@ public:
 	size_t begin = 0;
 	size_t end = 0;
 	std::string* text = nullptr;
-	std::string get() {
-		return text->substr(begin, end - begin + 1);
+	std::string get(bool addType = false) {
+		return addType ? getStringInternal(this) : text->substr(begin, end - begin + 1);
 	}
 	BracketsFile& getChildren(size_t index) {
 		if (!isLoad)
@@ -29,9 +34,10 @@ public:
 			loadArray();
 		return childrens.size();
 	}
-	size_t isArray() {
+	bool isArray() {
 		return text->at(begin) == '{' && text->at(end) == '}';
 	}
+	static std::string setType(std::string value, std::string type = "");
 private:
 	bool isLoad = false;
 	std::vector<BracketsFile> childrens;
@@ -43,4 +49,5 @@ private:
 	}
 	void loadArray();
 	bool nextToken(size_t& position, std::string tokens);
+	static std::string getStringInternal(BracketsFile* data);
 };
