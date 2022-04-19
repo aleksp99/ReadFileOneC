@@ -172,7 +172,7 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>$(OutDirFullPath)ReadFileOneC.lib</ImportLibrary>
       <ModuleDefinitionFile>$(SolutionDir)src\addin.def</ModuleDefinitionFile>
-      <ProgramDataBaseFile>$(SolutionDir)Release\ReadFileOneC.pdb</ProgramDataBaseFile>
+      <ProgramDataBaseFile>$(OutDirFullPath)ReadFileOneC.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -218,7 +218,7 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>$(OutDirFullPath)ReadFileOneC.lib</ImportLibrary>
       <ModuleDefinitionFile>$(SolutionDir)src\addin.def</ModuleDefinitionFile>
-      <ProgramDataBaseFile>$(SolutionDir)MinSizeRel\ReadFileOneC.pdb</ProgramDataBaseFile>
+      <ProgramDataBaseFile>$(OutDirFullPath)ReadFileOneC.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -263,7 +263,7 @@
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <ImportLibrary>$(OutDirFullPath)ReadFileOneC.lib</ImportLibrary>
       <ModuleDefinitionFile>$(SolutionDir)src\addin.def</ModuleDefinitionFile>
-      <ProgramDataBaseFile>$(SolutionDir)RelWithDebInfo\ReadFileOneC.pdb</ProgramDataBaseFile>
+      <ProgramDataBaseFile>$(OutDirFullPath)ReadFileOneC.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
