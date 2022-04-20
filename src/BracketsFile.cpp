@@ -11,6 +11,7 @@ void BracketsFile::loadArray() {
 	isLoad = true;
 	size_t lastPosition = begin;
 	size_t position = begin;
+	bool isEndArray;
 	int count;
 	while (nextToken(position, "\",{}")) {
 		switch (text->at(position)) {
@@ -28,7 +29,7 @@ void BracketsFile::loadArray() {
 			break;
 		case ',':
 		case '}':
-			bool isEndArray = false;
+			isEndArray = false;
 			for (size_t i = position - 1; i < position; i--)
 				if (escSymbol.find_first_of(text[i]) == escSymbol.npos) {
 					isEndArray = text->at(i) == '}';
