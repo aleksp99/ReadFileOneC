@@ -5,6 +5,7 @@
 re2::RE2 expNumber("-?[\\d]+(\\.[\\d]+)?");
 re2::RE2 expDateTime("[0-3][0-9]{3}[0-1][0-9][0-3][0-9][0-2][0-9]([0-5][0-9]){2}");
 re2::RE2 expQuid("(?i:([a-f\\d]{8}(-[a-f\\d]{4}){3}-[a-f\\d]{12}))");
+std::string escSymbol = "\t\n\f\r ";
 
 void BracketsFile::loadArray() {
 	isLoad = true;
@@ -26,11 +27,14 @@ void BracketsFile::loadArray() {
 			childrens.push_back(BracketsFile(text, lastPosition, position, true));
 			break;
 		case ',':
-			if (text->at(position - 1) != '}') // конец массива
-				childrens.push_back(BracketsFile(text, lastPosition, position, false));
-			break;
 		case '}':
-			if (text->at(position - 1) != '}') // конец массива
+			bool isEndArray = false;
+			for (size_t i = position - 1; i < position; i--)
+				if (escSymbol.find_first_of(text[i]) == escSymbol.npos) {
+					isEndArray = text->at(i) == '}';
+					break;
+				}
+			if (!isEndArray) // конец массива
 				childrens.push_back(BracketsFile(text, lastPosition, position, false));
 			return;
 		default:
