@@ -28,14 +28,11 @@ void BracketsFile::loadArray() {
 			childrens.push_back(BracketsFile(text, lastPosition, position, true));
 			break;
 		case ',':
+			if (text->at(lastPosition) != '}')
+				childrens.push_back(BracketsFile(text, lastPosition, position, false));
+			break;
 		case '}':
-			isEndArray = false;
-			for (size_t i = position - 1; i > lastPosition; i--)
-				if (escSymbol.find_first_of(text->at(i)) == escSymbol.npos) {
-					isEndArray = text->at(i) == '}';
-					break;
-				}
-			if (!isEndArray) // конец массива
+			if (text->at(lastPosition) != '}')
 				childrens.push_back(BracketsFile(text, lastPosition, position, false));
 			return;
 		default:
